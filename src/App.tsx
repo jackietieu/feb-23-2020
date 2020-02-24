@@ -131,6 +131,9 @@ function App() {
               multiple
               value={filterValues}
               onChange={handleChange}
+              inputProps={{
+                "data-testid": "breed-select"
+              }}
             >
               {breeds.map((breed: string) => (
                 <MenuItem key={breed} value={breed}>

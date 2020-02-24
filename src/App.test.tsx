@@ -8,7 +8,10 @@ test("renders page header", () => {
   expect(divElement).toBeInTheDocument();
 });
 
-test("does not render image container if no breeds are selected when page loads", async () => {
-  const { queryByTestId } = render(<App />);
+test("does not render image container if no breeds are selected when app first loads", () => {
+  const { getByTestId, queryByTestId } = render(<App />);
+  const input = getByTestId("breed-select");
+  const inputValue = (input as HTMLInputElement).value;
+  expect(inputValue.length).toBe(0);
   expect(queryByTestId("doggo-image-container")).toBeNull();
 });
