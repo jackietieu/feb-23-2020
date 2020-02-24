@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import Select, { SelectProps } from "@material-ui/core/Select";
 import Grid from "@material-ui/core/Grid";
 import CardMedia from "@material-ui/core/CardMedia";
 import Card from "@material-ui/core/Card";
@@ -104,8 +104,8 @@ function App() {
     })();
   }, [breeds]);
 
-  const handleChange = (event: any) => {
-    setFilterValues(event?.target?.value);
+  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setFilterValues(event?.target?.value as string[]);
   };
 
   const handleOpenModal = (imageSrc: string) => {
