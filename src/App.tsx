@@ -64,7 +64,7 @@ function App() {
 
   useEffect(() => {
     (async function fetchData() {
-      if (breeds.length && !!Object.keys(images).length) {
+      if (breeds.length && !Object.keys(images).length) {
         const promises = breeds.map((breed: string) =>
           fetch(`https://dog.ceo/api/breed/${breed}/images`)
         );
@@ -90,6 +90,8 @@ function App() {
   const handleChange = (event: any) => {
     setFilterValues(event?.target?.value);
   };
+
+  console.log(breeds, images);
 
   return (
     <Container classes={{ root: classes.container }}>
