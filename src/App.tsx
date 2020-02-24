@@ -12,7 +12,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
-import Grey from "@material-ui/core/colors/grey";
+import Modal from "@material-ui/core/Modal";
 
 const useStyles = makeStyles({
   card: {
@@ -22,7 +22,10 @@ const useStyles = makeStyles({
   media: {
     height: "100%",
     width: "100%",
-    margin: "0 auto"
+    margin: "0 auto",
+    "&:hover": {
+      cursor: "pointer"
+    }
   },
   formControl: {
     minWidth: 340,
@@ -32,7 +35,8 @@ const useStyles = makeStyles({
     paddingTop: 24,
     marginBottom: 16,
     textAlign: "center",
-    backgroundColor: Grey[50]
+    width: "100%",
+    height: "100%"
   },
   breedSectionHeader: {
     marginBottom: 16,
@@ -40,12 +44,25 @@ const useStyles = makeStyles({
   },
   sectionDivider: {
     marginBottom: 16
+  },
+  modal: {
+    margin: "auto",
+    "& > img": {
+      position: "absolute",
+      left: "50%",
+      top: "50%",
+      transform: "translate(-50%, -50%)",
+      maxWidth: "90vw",
+      maxHeight: "90vh",
+      outline: "none"
+    }
   }
 });
 
 function App() {
   const [breeds, setBreeds] = useLocalStorage("breeds", []);
   const [images, setImages] = useLocalStorage("images", {});
+  const [showModalImage, setShowModalImage] = useState("");
   const [filterValues, setFilterValues] = useState<string[]>([]);
   const classes = useStyles();
 
@@ -91,16 +108,22 @@ function App() {
     setFilterValues(event?.target?.value);
   };
 
-  console.log(breeds, images);
+  const handleOpenModal = (imageSrc: string) => {
+    setShowModalImage(imageSrc);
+  };
+
+  const handleCloseModal = () => {
+    setShowModalImage("");
+  };
 
   return (
-    <Container classes={{ root: classes.container }}>
+    <Container className={classes.container}>
       <Grid container direction="column" alignItems="center">
         <Grid item>
           <Typography variant="h4">Find pictures of good doggos!</Typography>
         </Grid>
         <Grid item>
-          <FormControl classes={{ root: classes.formControl }}>
+          <FormControl className={classes.formControl}>
             <InputLabel id="multiple-breeds-filter">Select Breeds</InputLabel>
             <Select
               labelId="multiple-breeds-filter"
@@ -118,7 +141,7 @@ function App() {
           </FormControl>
         </Grid>
       </Grid>
-      {!!filterValues.length && (
+      {!!filterValues.length && !!Object.keys(images).length && (
         <Grid
           container
           justify="center"
@@ -128,23 +151,19 @@ function App() {
         >
           {filterValues.map((breed, i) => (
             <Box mt={3} width="100%">
-              {i !== 0 && (
-                <Divider classes={{ root: classes.sectionDivider }} />
-              )}
-              <Typography
-                variant="h5"
-                classes={{ root: classes.breedSectionHeader }}
-              >
+              {i !== 0 && <Divider className={classes.sectionDivider} />}
+              <Typography variant="h5" className={classes.breedSectionHeader}>
                 {breed}s
               </Typography>
               <Grid container spacing={2} justify="center" alignItems="center">
                 {images[breed].map((imageSrc: string) => {
                   return (
                     <Grid item key={imageSrc} xs={12} sm={3}>
-                      <Card classes={{ root: classes.card }}>
+                      <Card className={classes.card}>
                         <CardMedia
-                          classes={{ root: classes.media }}
+                          className={classes.media}
                           image={imageSrc}
+                          onClick={() => handleOpenModal(imageSrc)}
                         />
                       </Card>
                     </Grid>
@@ -154,6 +173,11 @@ function App() {
             </Box>
           ))}
         </Grid>
+      )}
+      {!!showModalImage && (
+        <Modal open onClose={handleCloseModal} className={classes.modal}>
+          <img alt={showModalImage} src={showModalImage} />
+        </Modal>
       )}
     </Container>
   );
