@@ -6,6 +6,10 @@ To run this project, please clone this repo and follow the steps below.
 
 In the project directory, you can run:
 
+### `npm i`
+
+You need to run this to install dependencies for the app.
+
 ### `npm start`
 
 Runs the app in the development mode.<br />
